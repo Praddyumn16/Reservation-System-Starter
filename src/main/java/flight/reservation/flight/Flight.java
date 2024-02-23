@@ -14,11 +14,11 @@ public class Flight {
     private Airport arrival;
     protected Object aircraft;
 
-    public Flight(int number, Airport departure, Airport arrival, Object aircraft) throws IllegalArgumentException {
-        this.number = number;
-        this.departure = departure;
-        this.arrival = arrival;
-        this.aircraft = aircraft;
+    private Flight(Builder builder) {
+        this.number = builder.number;
+        this.departure = builder.departure;
+        this.arrival = builder.arrival;
+        this.aircraft = builder.aircraft;
         checkValidity();
     }
 
@@ -65,4 +65,34 @@ public class Flight {
         return aircraft.toString() + "-" + number + "-" + departure.getCode() + "/" + arrival.getCode();
     }
 
+    public static class Builder {
+        private int number;
+        private Airport departure;
+        private Airport arrival;
+        protected Object aircraft;
+
+        public Builder number(int number) {
+            this.number = number;
+            return this;
+        }
+
+        public Builder departure(Airport departure) {
+            this.departure = departure;
+            return this;
+        }
+
+        public Builder arrival(Airport arrival) {
+            this.arrival = arrival;
+            return this;
+        }
+
+        public Builder aircraft(Object aircraft) {
+            this.aircraft = aircraft;
+            return this;
+        }
+
+        public Flight build() throws IllegalArgumentException {
+            return new Flight(this);
+        }
+    }
 }

@@ -3,6 +3,7 @@ package flight.reservation.order;
 import flight.reservation.Customer;
 import flight.reservation.Passenger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,44 +15,48 @@ public class Order {
     private Customer customer;
     private List<Passenger> passengers;
 
-    public Order() {
-        this.id = UUID.randomUUID();
+    protected Order(Builder<?> builder) {
+        this.id = UUID.randomUUID(); // This remains auto-generated
+        this.price = builder.price;
+        this.customer = builder.customer;
+        this.passengers = builder.passengers;
+        this.isClosed = builder.isClosed;
     }
 
-    public UUID getId() {
-        return id;
-    }
+    // Existing getters and setters...
 
-    public double getPrice() {
-        return price;
-    }
+    public static class Builder<T extends Builder<T>> {
+        private double price;
+        private boolean isClosed = false;
+        private Customer customer;
+        private List<Passenger> passengers = new ArrayList<>();
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+        public T price(double price) {
+            this.price = price;
+            return self();
+        }
 
-    public Customer getCustomer() {
-        return customer;
-    }
+        public T customer(Customer customer) {
+            this.customer = customer;
+            return self();
+        }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
+        public T passengers(List<Passenger> passengers) {
+            this.passengers = passengers;
+            return self();
+        }
 
-    public List<Passenger> getPassengers() {
-        return passengers;
-    }
+        public T isClosed(boolean isClosed) {
+            this.isClosed = isClosed;
+            return self();
+        }
 
-    public void setPassengers(List<Passenger> passengers) {
-        this.passengers = passengers;
-    }
+        protected T self() {
+            return (T) this;
+        }
 
-    public boolean isClosed() {
-        return isClosed;
+        public Order build() {
+            return new Order(this);
+        }
     }
-
-    public void setClosed() {
-        isClosed = true;
-    }
-
 }
